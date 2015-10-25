@@ -13,6 +13,7 @@ class GamesController
   def set_view
     view.clear
     view.welcome
+    view.display(@board.to_s)
   end
 
   def play_game
@@ -21,12 +22,10 @@ class GamesController
       set_view
       current_move = @view.enter_move
       @player_one.make_move(current_move, @board)
-      @view.display(@board.to_s)
       break if @board.winner?
       set_view
       current_move = @view.enter_move
       @player_two.make_move(current_move, @board)
-      @view.display(@board.to_s)
       break if @board.winner?
     end
     view.display "Winner is: #{board.winner}"
