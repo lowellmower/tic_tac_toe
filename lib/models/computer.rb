@@ -11,6 +11,8 @@ class Computer < Player
     @piece = args[:piece]
   end
 
+# computer logic for always winning
+
   private
 
     def defaults
