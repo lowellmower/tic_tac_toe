@@ -1,5 +1,4 @@
 require 'pry'
-require_relative 'game'
 require_relative 'models/board'
 require_relative 'models/player'
 require_relative 'models/computer'
