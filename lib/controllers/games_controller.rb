@@ -31,21 +31,6 @@ class GamesController
     view.display "Winner is: #{board.winner}"
   end
 
-
-  # def run
-  #   game_init
-  #   until win
-  #     get_home_view
-  #     player_one.get_move(tic_tac_toe)
-  #     break if win
-  #     get_home_view
-  #     player_two.get_move(tic_tac_toe)
-  #     get_home_view
-  #     break if win
-  #   end
-  #   view.display "Result : #{tic_tac_toe.winner} "
-  # end
-
   private
 
     def defaults
