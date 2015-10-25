@@ -26,7 +26,7 @@ class Board
   end
 
   def board_check
-    return true if col_check || row_check || diagonal_check
+    return true if col_check || row_check || diagonal_check || tie?
     false
   end
 
@@ -35,7 +35,6 @@ class Board
   end
 
   private
-  # refactor this
     def prep_board(board)
       matrix_board = []
       board.each_slice(3) do |row|
@@ -61,7 +60,6 @@ class Board
     end
 
     def diagonal_check
-      # refactor this
       left_right_diag = (0..2).collect {|i| @board[i][i]}
       right_left_diag = (0..2).collect {|i| @board.reverse[i][i]}
       if left_right_diag.uniq.length == 1
@@ -72,6 +70,11 @@ class Board
         return true
       end
       false
+    end
+
+    def tie?
+      @winner = "Tie!"
+      return true if @game_board.all? {|x| x == "X" || x == "O"}
     end
 
     def defaults
