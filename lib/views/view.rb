@@ -12,7 +12,7 @@ class View
   end
 
   def welcome
-    output.puts "**T][C T@C T0E**"
+    output.puts "*****************\n** TAC TOC TIE **\n*****************"
   end
 
   def clear
@@ -24,7 +24,7 @@ class View
   end
 
   def enter_move
-    @output.puts "Please select a number space:\n"
+    @output.puts "\nSelect Number to Place Piece:\n"
     prompt
   end
 
