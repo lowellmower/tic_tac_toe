@@ -12,17 +12,21 @@ class Player
     move = move.to_i
     if valid_move?(move) && move_available?(move, board)
       move -= 1
-      place_piece(move, board) and return
-      # prompt controller to update view comm
+      place_piece(move, board) and return true
     end
     board.reject_piece
   end
 
+  def valid_move?(move)
+    return false unless move.is_a? Integer
+    return false if move > 9 || move < 1
+    true
+  end
 
   private
 
     def place_piece(move, board)
-      board.move_piece(move, @piece)
+      board.accept_piece(move, @piece)
     end
 
     def move_available?(move, board)
@@ -30,11 +34,6 @@ class Player
       true
     end
 
-    def valid_move?(move)
-      return false unless move.is_a? Integer
-      return false if move > 9 || move < 1
-      true
-    end
 
     def defaults
       {name: "Human Player", piece: "X"}
