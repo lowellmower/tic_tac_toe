@@ -18,6 +18,7 @@ class Player
   end
 
   def valid_move?(move)
+    move = move.to_i
     return false unless move.is_a? Integer
     return false if move > 9 || move < 1
     true
