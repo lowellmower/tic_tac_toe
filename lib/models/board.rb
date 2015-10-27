@@ -1,24 +1,32 @@
+require 'pry'
 class Board
 
-  attr_accessor :game_board, :board, :winner
+  attr_accessor :game_board, :board, :winner, :count
 
   def initialize(args = {})
     args = defaults.merge(args)
     @game_board = args[:game_board]
     @board = prep_board(@game_board)
     @winner = nil
+    @count = 0
   end
 
-  def move_piece(move, piece)
+  def accept_piece(move, piece)
+    move = move.to_i
+    move -= 1
     @game_board[move] = piece
     @board = prep_board(@game_board)
-    # remove messaging and abstract into controller
-    p "quality move"
+    @count += 1
+  end
+
+  def revert_move(move)
+    @game_board[(move.to_i - 1)] = move
+    @board = prep_board(@game_board)
+    @count -= 1
   end
 
   def reject_piece
-    # should return nil and propmt controller to communicate invalid move
-    p "sorry friend"
+    nil
   end
 
   def winner?
@@ -34,7 +42,17 @@ class Board
     @board.map {|row| row.join(' | ') }.join("\n----------\n")
   end
 
+  def move_available?(move)
+    return true if @game_board.include?(move)
+    false
+  end
+
+  def available_moves
+    @game_board.select{|x| x =~ /[1-9]/}
+  end
+
   private
+
     def prep_board(board)
       matrix_board = []
       board.each_slice(3) do |row|
@@ -45,16 +63,20 @@ class Board
 
     def col_check
       @board.transpose.each do |col|
-        @winner = col.uniq[0]
-        return true if col.uniq.length == 1
+        if col.uniq.length == 1
+          @winner = col.uniq[0]
+          return true
+        end
       end
       false
     end
 
     def row_check
       @board.each do |row|
-        @winner = row.uniq[0]
-        return true if row.uniq.length == 1
+        if row.uniq.length == 1
+          @winner = row.uniq[0]
+          return true
+        end
       end
       false
     end
@@ -73,8 +95,11 @@ class Board
     end
 
     def tie?
-      @winner = "Tie!"
-      return true if @game_board.all? {|x| x == "X" || x == "O"}
+      if @game_board.all? {|x| x == "X" || x == "O"}
+        @winner = "Tie!"
+        return true
+      end
+      false
     end
 
     def defaults
