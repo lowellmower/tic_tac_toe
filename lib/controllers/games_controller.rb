@@ -1,3 +1,4 @@
+require 'pry'
 class GamesController
 
   attr_accessor :player_one, :player_two, :board, :view
@@ -12,23 +13,38 @@ class GamesController
 
   def set_view
     view.clear
-    view.welcome
+    view.welcome_message
     view.display(@board.to_s)
   end
 
   def play_game
-    set_view
     until board.winner?
       set_view
-      current_move = @view.enter_move
-      @player_one.make_move(current_move, @board)
+      get_move(player_one)
+      validate_move(player_one)
+      player_one.make_move(view.input, board)
       break if @board.winner?
       set_view
-      current_move = @view.enter_move
-      @player_two.make_move(current_move, @board)
+      # get_move(player_two)
+      # validate_move(player_two)
+      player_two.make_move(board)
       break if @board.winner?
     end
+    set_view
     view.display "Winner is: #{board.winner}"
+  end
+
+  def validate_move(player)
+    until player.valid_move?(view.input) && board.move_available?(view.input)
+      set_view
+      view.move_error
+      get_move(player)
+    end
+  end
+
+  def get_move(player)
+    view.display "\n#{player.name.upcase}'s MOVE ('#{player.piece}')"
+    view.enter_move
   end
 
   private
