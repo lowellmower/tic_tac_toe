@@ -9,18 +9,15 @@ class Player
   end
 
   def make_move(move, board)
-    move = move.to_i
     if valid_move?(move) && move_available?(move, board)
-      move -= 1
       place_piece(move, board) and return true
     end
     board.reject_piece
   end
 
   def valid_move?(move)
-    move = move.to_i
-    return false unless move.is_a? Integer
-    return false if move > 9 || move < 1
+    return false if move == ("X" || "O")
+    return false if move.to_i > 9 || move.to_i < 1
     true
   end
 
@@ -34,7 +31,6 @@ class Player
       return false unless board.game_board.include?(move.to_s)
       true
     end
-
 
     def defaults
       {name: "Human Player", piece: "X"}
