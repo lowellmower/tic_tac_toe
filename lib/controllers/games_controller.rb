@@ -27,6 +27,7 @@ class GamesController
       set_view
       # get_move(player_two)
       # validate_move(player_two)
+      view.display "Computer thinking..."
       player_two.make_move(board)
       break if @board.winner?
     end
