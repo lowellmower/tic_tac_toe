@@ -5,7 +5,5 @@ require_relative 'models/computer'
 require_relative 'views/view'
 require_relative 'controllers/games_controller'
 
-# ARGV = gets.chomp
-# game = Game.new
-# game.start_game
-binding.pry
+gc = GamesController.new
+gc.play_game
