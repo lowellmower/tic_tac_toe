@@ -25,10 +25,14 @@ class GamesController
       player_one.make_move(view.input, board)
       break if @board.winner?
       set_view
-      # get_move(player_two)
-      # validate_move(player_two)
-      view.display "Computer thinking..."
-      player_two.make_move(board)
+      if player_two.class == Player
+        get_move(player_two)
+        validate_move(player_two)
+        player_two.make_move(view.input, board)
+      else
+        view.display "Computer thinking..."
+        player_two.make_move(board)
+      end
       break if @board.winner?
     end
     set_view
