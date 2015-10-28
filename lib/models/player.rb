@@ -1,5 +1,12 @@
 class Player
 
+  attr_accessor :name, :piece
+
+  def initialize(args = {})
+    @name = args[:name]
+    @piece = args[:piece]
+  end
+
   def valid_move?(move)
     return false if move == ("X" || "O")
     return false if move.to_i > 9 || move.to_i < 1
