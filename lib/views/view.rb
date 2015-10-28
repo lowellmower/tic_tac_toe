@@ -24,10 +24,10 @@ class View
     @output.puts msg
   end
 
-  def enter_move
-    @output.puts "\nSelect number to place piece:\n"
-    prompt
-  end
+  # def enter_move
+  #   @output.puts "\nSelect number to place piece:\n"
+  #   prompt
+  # end
 
   def move_error
     @output.puts "\nInvalid move. Select number on board.\n"
