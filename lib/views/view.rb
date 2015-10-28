@@ -1,11 +1,10 @@
 class View
 
-  attr_accessor :input, :output, :start_info
+  attr_accessor :input, :output
 
   def initialize
     @input = $stdin
     @output = $stdout
-    @start_info = {}
   end
 
   def prompt
@@ -23,11 +22,6 @@ class View
   def display(msg)
     @output.puts msg
   end
-
-  # def enter_move
-  #   @output.puts "\nSelect number to place piece:\n"
-  #   prompt
-  # end
 
   def move_error
     @output.puts "\nInvalid move. Select number on board.\n"
