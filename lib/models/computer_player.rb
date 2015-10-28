@@ -1,7 +1,5 @@
 require_relative 'player'
-require 'pry'
-
-class Computer < Player
+class ComputerPlayer < Player
 
   attr_accessor :name, :difficulty, :piece, :current_move
 
@@ -50,7 +48,6 @@ class Computer < Player
   def make_move(board)
     minimax(board, board.count, true)
     board.accept_piece(@current_move, @piece)
-
     sleep 1
   end
 
