@@ -12,16 +12,6 @@ class GamesController
     @player_two = args[:player_two]
   end
 
-  def clear_and_welcome
-    view.clear
-    view.welcome_message
-  end
-
-  def set_view
-    clear_and_welcome
-    view.display(@board.to_s)
-  end
-
   def play_game
     clear_and_welcome
     view.display "\nPlease select play type:\n1. Person vs. Person\n2. Person vs. Computer\n3. Computer vs. Computer"
@@ -34,6 +24,7 @@ class GamesController
     end
     clear_and_welcome
     who_first?
+    view.display "Winner is: #{board.winner}"
   end
 
   def validate_move(player)
@@ -45,11 +36,21 @@ class GamesController
   end
 
   def get_move(player)
-    view.display "\n#{player.name.upcase}'s MOVE ('#{player.piece}')"
-    view.enter_move
+    view.display "\n#{player.name.upcase}'s MOVE ('#{player.piece}')\nSelect number to place piece:"
+    view.prompt
   end
 
   private
+
+    def clear_and_welcome
+      view.clear
+      view.welcome_message
+    end
+
+    def set_view
+      clear_and_welcome
+      view.display(@board.to_s)
+    end
 
     def who_first?
       view.display "Who Goes first?\n1. X\n2. O"
@@ -60,6 +61,7 @@ class GamesController
         else who_first?
       end
       clear_and_welcome
+      set_view
     end
 
     def play_game_o
@@ -71,8 +73,6 @@ class GamesController
         player_or_human_move(player_one)
         break if @board.winner?
       end
-      set_view
-      view.display "Winner is: #{board.winner}"
     end
 
     def play_game_x
@@ -84,8 +84,6 @@ class GamesController
         player_or_human_move(player_two)
         break if @board.winner?
       end
-      set_view
-      view.display "Winner is: #{board.winner}"
     end
 
     def player_or_human_move(player)
@@ -140,9 +138,10 @@ class GamesController
       clear_and_welcome
       view.display "Please enter Computer One's Name\n"
       name_and_piece(player_one)
-      self.player_two = ComputerPlayer.new
-      view.display "Please enter Copmuter's Name\n"
+      self.player_two = ComputerPlayer.new(opponent: player_one.piece)
+      view.display "Please enter Copmuter Two's Name\n"
       name_and_piece(player_two)
+      player_one.opponent = player_two.piece
     end
 
     def defaults
