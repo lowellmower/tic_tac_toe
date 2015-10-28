@@ -5,8 +5,6 @@ class HumanPlayer < Player
 
   def initialize(args = {})
     args = defaults.merge(args)
-    @name = args[:name]
-    @piece = args[:piece]
   end
 
   def make_move(move, board)
