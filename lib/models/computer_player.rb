@@ -1,20 +1,19 @@
 require_relative 'player'
 class ComputerPlayer < Player
 
-  attr_accessor :name, :difficulty, :piece, :current_move
+  attr_accessor :name, :piece, :current_move, :opponent
+  attr_writer :difficulty
 
   def initialize(args = {})
     args = defaults.merge(args)
     @difficulty = args[:difficulty]
-    @name = args[:name]
-    @piece = args[:piece]
-    @oppponent = args[:oppponent]
+    @opponent = args[:opponent]
     @current_move
   end
 
   def score(depth, board)
     return 10 - depth if board.winner == @piece
-    return depth - 10 if board.winner == @oppponent
+    return depth - 10 if board.winner == @opponent
     tie = 0
   end
 
@@ -31,14 +30,14 @@ class ComputerPlayer < Player
   end
 
   def minimax(board, depth, bool)
-    return score(depth, board) if board.winner? || depth == 8
+    return score(depth, board) if board.winner?
     scores = []
     moves = []
     board.available_moves.each do |pos_move|
       board.accept_piece(pos_move, @piece) if bool
-      board.accept_piece(pos_move, @oppponent) if !bool
-      scores << minimax(board, depth+1, false) if bool
-      scores << minimax(board, depth+1, true) if !bool
+      board.accept_piece(pos_move, @opponent) if !bool
+      scores << minimax(board, depth + 1, false) if bool
+      scores << minimax(board, depth + 1, true) if !bool
       moves << pos_move
       board.revert_move(pos_move)
     end
@@ -54,7 +53,7 @@ class ComputerPlayer < Player
   private
 
     def defaults
-      {name: "Computer", difficulty: "hard", piece: "O", oppponent: "X"}
+      {name: "Computer", difficulty: "hard", piece: "O", opponent: "X"}
     end
 
 end
