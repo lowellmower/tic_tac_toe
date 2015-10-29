@@ -1,3 +1,4 @@
+require 'pry'
 require_relative 'spec_helper'
 
 describe View do
@@ -48,10 +49,9 @@ describe View do
   end
 
   it "can recieve a message from standard in" do
-    fake_stdin("Hello") do
-      view.prompt
-      expect(view.input).to eq("Hello")
-    end
+    $stdin = "Hello"
+    expect(view).to respond_to(:prompt)
+    expect(view.input).to eq("Hello")
   end
 
 end
