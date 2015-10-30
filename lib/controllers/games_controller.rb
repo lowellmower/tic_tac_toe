@@ -1,19 +1,17 @@
-require 'pry'
 class GamesController
-
   attr_accessor :board, :player_one, :player_two
   attr_reader :view
-
   def initialize(args = {})
     args = defaults.merge(args)
     @view = args[:view]
     @board = args[:board]
     @player_one = args[:player_one]
     @player_two = args[:player_two]
+    @player_arr = []
   end
 
-  def play_game
-    clear_and_welcome
+  def initialize_game
+    set_view
     view.display "\nPlease select play type:\n1. Person vs. Person\n2. Person vs. Computer\n3. Computer vs. Computer"
     view.prompt
     result = case view.input
@@ -22,71 +20,49 @@ class GamesController
       when "3" then init_cvc
       else play_game
     end
-    clear_and_welcome
+    set_view
     who_first?
+    play_game
     view.display "Winner is: #{board.winner}"
-  end
-
-  def validate_move(player)
-    until player.valid_move?(view.input) && board.move_available?(view.input)
-      set_view
-      view.move_error
-      get_move(player)
-    end
-  end
-
-  def get_move(player)
-    view.display "\n#{player.name.upcase}'s MOVE ('#{player.piece}')\nSelect number to place piece:"
-    view.prompt
   end
 
   private
 
-    def clear_and_welcome
-      view.clear
-      view.welcome_message
+    def get_move(player)
+      view.display "\n#{player.name.upcase}'s MOVE ('#{player.piece}')\nSelect number to place piece:"
+      view.prompt
     end
 
     def set_view
-      clear_and_welcome
+      view.clear
+      view.welcome_message
       view.display(@board.to_s)
     end
 
     def who_first?
-      view.display "Who Goes first?\n1. X\n2. O"
+      view.display "Who Goes first?\n1. #{player_one.name}\n2. #{player_two.name}"
       view.prompt
       result = case view.input
-        when "1" then play_game_x
-        when "2" then play_game_o
+        when "1" then @player_arr
+        when "2" then @player_arr.reverse!
         else who_first?
       end
-      clear_and_welcome
       set_view
     end
 
-    def play_game_o
+    def play_game
       until board.winner?
+        player_or_human_move(@player_arr[0])
         set_view
-        player_or_human_move(player_two)
         break if @board.winner?
+        player_or_human_move(@player_arr[1])
         set_view
-        player_or_human_move(player_one)
-        break if @board.winner?
-      end
-    end
-
-    def play_game_x
-      until board.winner?
-        set_view
-        player_or_human_move(player_one)
-        break if @board.winner?
-        set_view
-        player_or_human_move(player_two)
         break if @board.winner?
       end
     end
 
     def player_or_human_move(player)
+      set_view
       if player.class == HumanPlayer
         get_move(player)
         validate_move(player)
@@ -100,7 +76,7 @@ class GamesController
     def name_and_piece(player)
       view.prompt
       player.name = view.input
-      clear_and_welcome
+      set_view
       prompt_for_piece(player)
     end
 
@@ -112,36 +88,49 @@ class GamesController
         when "2" then player.piece = "O"
         else prompt_for_piece(player)
       end
-      clear_and_welcome
+      set_view
+    end
+
+    def validate_move(player)
+      until player.valid_move?(view.input) && board.move_available?(view.input)
+        set_view
+        view.display "**You must select an avialable number on the board**"
+        get_move(player)
+      end
     end
 
     def init_pvp
-      clear_and_welcome
+      set_view
       view.display "Please enter Player One's Name\n"
       name_and_piece(player_one)
       self.player_two = HumanPlayer.new
       view.display "Please enter Player Two's Name\n"
       name_and_piece(player_two)
+      @player_arr.push(player_one, player_two)
     end
 
     def init_pvc
-      clear_and_welcome
+      set_view
       view.display "Please enter Player One's Name\n"
       name_and_piece(player_one)
       self.player_two = ComputerPlayer.new
       view.display "Please enter Copmuter's Name\n"
       name_and_piece(player_two)
+      player_two.opponent = player_one.piece
+      @player_arr.push(player_one, player_two)
     end
 
     def init_cvc
+      set_view
       self.player_one = ComputerPlayer.new
-      clear_and_welcome
       view.display "Please enter Computer One's Name\n"
       name_and_piece(player_one)
       self.player_two = ComputerPlayer.new(opponent: player_one.piece)
       view.display "Please enter Copmuter Two's Name\n"
       name_and_piece(player_two)
       player_one.opponent = player_two.piece
+      player_two.opponent = player_one.piece
+      @player_arr.push(player_one, player_two)
     end
 
     def defaults
