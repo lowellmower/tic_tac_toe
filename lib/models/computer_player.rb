@@ -46,7 +46,7 @@ class ComputerPlayer < Player
   def make_move(board)
     minimax(board, board.move_count, true)
     board.accept_piece(@current_move, @piece)
-    # sleep 1
+    sleep 1
   end
 
   private
