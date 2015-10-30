@@ -126,7 +126,7 @@ class GamesController
       view.display "Please enter Computer One's Name\n"
       name_and_piece(player_one)
       self.player_two = ComputerPlayer.new(opponent: player_one.piece)
-      view.display "Please enter Copmuter Two's Name\n"
+      view.display "Please enter Computer Two's Name\n"
       name_and_piece(player_two)
       player_one.opponent = player_two.piece
       player_two.opponent = player_one.piece
