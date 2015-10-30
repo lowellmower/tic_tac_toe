@@ -1,14 +1,14 @@
 require 'pry'
 class Board
 
-  attr_accessor :game_board, :board, :winner, :count
+  attr_accessor :game_board, :board, :winner, :move_count
 
   def initialize(args = {})
     args = defaults.merge(args)
     @game_board = args[:game_board]
     @board = prep_board(@game_board)
     @winner = nil
-    @count = 0
+    @move_count = 0
   end
 
   def accept_piece(move, piece)
@@ -16,13 +16,13 @@ class Board
     move -= 1
     @game_board[move] = piece
     @board = prep_board(@game_board)
-    @count += 1
+    @move_count += 1
   end
 
   def revert_move(move)
     @game_board[(move.to_i - 1)] = move
     @board = prep_board(@game_board)
-    @count -= 1
+    @move_count -= 1
   end
 
   def reject_piece

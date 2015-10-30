@@ -23,8 +23,4 @@ class View
     @output.puts msg
   end
 
-  def move_error
-    @output.puts "\nInvalid move. Select number on board.\n"
-  end
-
 end

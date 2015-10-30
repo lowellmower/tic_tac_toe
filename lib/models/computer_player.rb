@@ -1,14 +1,14 @@
 require_relative 'player'
 class ComputerPlayer < Player
 
-  attr_accessor :name, :piece, :current_move, :opponent
-  attr_writer :difficulty
+  attr_accessor :name, :piece, :current_move, :opponent, :difficulty
 
   def initialize(args = {})
     args = defaults.merge(args)
     @difficulty = args[:difficulty]
     @opponent = args[:opponent]
-    @current_move
+    @piece = args[:piece]
+    @current_move = nil
   end
 
   def score(depth, board)
@@ -22,11 +22,10 @@ class ComputerPlayer < Player
       max_score_idx = scores.each_with_index.max[1]
       @current_move = moves[max_score_idx]
       return scores[max_score_idx]
-    else
-      min_score_idx = scores.each_with_index.min[1]
-      @current_move = moves[min_score_idx]
-      return scores[min_score_idx]
     end
+    min_score_idx = scores.each_with_index.min[1]
+    @current_move = moves[min_score_idx]
+    return scores[min_score_idx]
   end
 
   def minimax(board, depth, bool)
@@ -45,9 +44,9 @@ class ComputerPlayer < Player
   end
 
   def make_move(board)
-    minimax(board, board.count, true)
+    minimax(board, board.move_count, true)
     board.accept_piece(@current_move, @piece)
-    sleep 1
+    # sleep 1
   end
 
   private
