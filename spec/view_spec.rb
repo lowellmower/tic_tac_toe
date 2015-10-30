@@ -26,10 +26,6 @@ describe View do
     expect(view.output).to eq("Hello, world.")
   end
 
-  it "can send an error message to standard out" do
-    expect{view.move_error}.to output.to_stdout
-  end
-
   it "can send a welcome message to standard out" do
     expect{view.welcome_message}.to output.to_stdout
   end
